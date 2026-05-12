@@ -1,26 +1,23 @@
 import { AppSidebar } from '@/components/app-sidebar';
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
+import { CalendarView } from '@/components/calendar-view';
+import { ListPlaceholderView } from '@/components/list-placeholder-view';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import * as React from 'react';
 
 export function App() {
+  const [activeId, setActiveId] = React.useState('inbox');
+
   return (
     <TooltipProvider delayDuration={0}>
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar activeId={activeId} onSelectList={setActiveId} />
         <SidebarInset>
-          <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
-            <SidebarTrigger />
-          </header>
-          <div className="flex flex-1 flex-col gap-2 p-6">
-            <h1 className="text-2xl font-semibold tracking-tight">Inbox</h1>
-            <p className="text-muted-foreground max-w-xl text-sm">
-              Tasks go here.
-            </p>
-          </div>
+          {activeId === 'calendar' ? (
+            <CalendarView />
+          ) : (
+            <ListPlaceholderView id={activeId} />
+          )}
         </SidebarInset>
       </SidebarProvider>
     </TooltipProvider>

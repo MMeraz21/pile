@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { Calendar, Inbox, ListChecks } from 'lucide-react';
+import { CalendarDays, Inbox, ListChecks, Sun } from 'lucide-react';
 import * as React from 'react';
 
 type ListItem = {
@@ -21,14 +21,19 @@ type ListItem = {
 
 const lists: ListItem[] = [
   { id: 'inbox', label: 'Inbox', icon: Inbox },
-  { id: 'today', label: 'Today', icon: Calendar },
+  { id: 'today', label: 'Today', icon: Sun },
+  { id: 'calendar', label: 'Calendar', icon: CalendarDays },
   { id: 'done', label: 'Done', icon: ListChecks },
 ];
 
 export function AppSidebar({
   activeId = 'inbox',
+  onSelectList,
   ...props
-}: React.ComponentProps<typeof Sidebar> & { activeId?: string }) {
+}: React.ComponentProps<typeof Sidebar> & {
+  activeId?: string;
+  onSelectList?: (id: string) => void;
+}) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="h-12 justify-center border-b border-sidebar-border">
@@ -46,6 +51,7 @@ export function AppSidebar({
                   <SidebarMenuButton
                     isActive={activeId === id}
                     tooltip={label}
+                    onClick={() => onSelectList?.(id)}
                   >
                     <Icon />
                     <span>{label}</span>
