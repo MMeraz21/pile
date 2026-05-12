@@ -1,21 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
+    <title>pile</title>
   </head>
-  <body
-    class="min-h-screen bg-neutral-950 px-8 py-12 font-sans text-neutral-100 antialiased"
-  >
-    <main class="mx-auto max-w-xl">
-      <h1 class="text-3xl font-semibold tracking-tight text-white">
-        Hello World!
-      </h1>
-      <p class="mt-3 text-neutral-400">
-        Welcome to your Electron application. Tailwind runs through PostCSS
-        (<code class="rounded bg-neutral-800 px-1.5 py-0.5 text-sm text-emerald-300">tailwind.config.cjs</code>).
-      </p>
-    </main>
-    <script type="module" src="/src/renderer.ts"></script>
+  <body class="min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/renderer.tsx"></script>
   </body>
 </html>
