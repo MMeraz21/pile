@@ -151,7 +151,7 @@ export function TodosListView({ mode }: TodosListViewProps) {
             <li
               key={todo.id}
               className={cn(
-                'flex items-start gap-2 rounded-lg border bg-card px-3 py-2 shadow-sm',
+                'flex items-center gap-2 rounded-lg border bg-card px-3 py-2 shadow-sm',
               )}
             >
               {canMutate ? (
@@ -159,7 +159,7 @@ export function TodosListView({ mode }: TodosListViewProps) {
                   type="button"
                   variant="ghost"
                   size="icon-sm"
-                  className="mt-0.5 shrink-0"
+                  className="shrink-0"
                   aria-pressed={todo.completed}
                   aria-label={
                     todo.completed ? 'Mark as not done' : 'Mark as done'
@@ -176,7 +176,7 @@ export function TodosListView({ mode }: TodosListViewProps) {
               <div className="min-w-0 flex-1">
                 <p
                   className={cn(
-                    'break-words text-sm font-medium',
+                    'break-words text-sm font-medium leading-snug',
                     todo.completed && canMutate
                       ? 'text-muted-foreground line-through'
                       : undefined,
@@ -185,7 +185,7 @@ export function TodosListView({ mode }: TodosListViewProps) {
                   {todo.title}
                 </p>
                 {mode === 'done' ? (
-                  <p className="text-muted-foreground mt-1 text-xs">
+                  <p className="text-muted-foreground mt-1 text-xs leading-snug">
                     {formatTodoDateLabel(todo.dateKey)}
                   </p>
                 ) : null}
@@ -195,7 +195,7 @@ export function TodosListView({ mode }: TodosListViewProps) {
                   type="button"
                   variant="ghost"
                   size="icon-sm"
-                  className="text-muted-foreground hover:text-destructive mt-0.5 shrink-0"
+                  className="text-muted-foreground hover:text-destructive shrink-0"
                   aria-label={`Delete "${todo.title}"`}
                   onClick={() => void remove(todo.id)}
                 >
