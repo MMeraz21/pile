@@ -11,7 +11,6 @@ export type TodosListMode = 'inbox' | 'today' | 'done';
 
 type TodosListViewProps = {
   mode: TodosListMode;
-  description: string;
 };
 
 function formatTodoDateLabel(dateKey: string | null): string {
@@ -20,7 +19,7 @@ function formatTodoDateLabel(dateKey: string | null): string {
   return d ? d.toLocaleDateString(undefined, { dateStyle: 'medium' }) : dateKey;
 }
 
-export function TodosListView({ mode, description }: TodosListViewProps) {
+export function TodosListView({ mode }: TodosListViewProps) {
   const api = getTodosApi();
   const todayKey = React.useMemo(() => toDateKey(new Date()), []);
 
@@ -57,12 +56,14 @@ export function TodosListView({ mode, description }: TodosListViewProps) {
     void load();
   }, [load]);
 
+  const showAddForm = mode === 'today';
+
   const onAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!api || mode === 'done') return;
+    if (!api || mode !== 'today') return;
     const title = draft.trim();
     if (!title) return;
-    const dateKey = mode === 'inbox' ? null : todayKey;
+    const dateKey = todayKey;
     setError(null);
     try {
       await api.create({ title, dateKey });
@@ -98,7 +99,6 @@ export function TodosListView({ mode, description }: TodosListViewProps) {
   if (!api) {
     return (
       <div className="flex flex-1 flex-col gap-4 p-6 pt-4">
-        <p className="text-muted-foreground max-w-xl text-sm">{description}</p>
         <p className="text-amber-600 dark:text-amber-400 max-w-xl text-sm">
           Local storage runs in the desktop app only. Launch pile with Electron
           to load and save todos.
@@ -111,11 +111,7 @@ export function TodosListView({ mode, description }: TodosListViewProps) {
 
   return (
     <div className="flex flex-1 flex-col gap-4 min-h-0 p-6 pt-4">
-      <p className="text-muted-foreground max-w-xl shrink-0 text-sm">
-        {description}
-      </p>
-
-      {canMutate && (
+      {showAddForm && (
         <form
           className="flex shrink-0 items-center gap-2"
           onSubmit={(e) => void onAdd(e)}
@@ -139,17 +135,16 @@ export function TodosListView({ mode, description }: TodosListViewProps) {
         </p>
       )}
 
-      <Separator className="shrink-0" />
+      {(showAddForm || error) ? <Separator className="shrink-0" /> : null}
 
       <ul className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1">
         {busy && todos.length === 0 ? (
           <li className="text-muted-foreground text-sm">Loading…</li>
         ) : todos.length === 0 ? (
           <li className="text-muted-foreground text-sm">
-            Nothing here yet.{' '}
-            {canMutate
-              ? 'Add something above.'
-              : 'Completed tasks will collect here.'}
+            {mode === 'done'
+              ? 'Completed tasks will collect here.'
+              : 'Nothing here yet.'}
           </li>
         ) : (
           todos.map((todo) => (
